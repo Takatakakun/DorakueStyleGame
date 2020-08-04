@@ -6,13 +6,13 @@ public class PlayerController : MonoBehaviour
 {
 
     private CharacterController m_characterCtl;
-    private Animator m_animator;
-    private Vector3 m_velocity;
+    private Animator            m_animator;
+    private Vector3             m_velocity;
 
-    public Transform m_verRot;       //縦の視点移動の変数(カメラに合わせる)
-    public Transform m_horRot;       //横の視点移動の変数(プレイヤーに合わせる)
-    public float m_jumpPower;    //ジャンプ力
-    public float m_moveSpeed;    //移動速度
+    public Transform            m_verRot;       //縦の視点移動の変数(カメラに合わせる)
+    public Transform            m_horRot;       //横の視点移動の変数(プレイヤーに合わせる)
+    public float                m_jumpPower;    //ジャンプ力
+    public float                m_moveSpeed;    //移動速度
 
     private void Start()
     {
@@ -61,5 +61,4 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
 }
