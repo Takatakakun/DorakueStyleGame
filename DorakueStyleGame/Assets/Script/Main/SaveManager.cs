@@ -6,10 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// セーブ機能
-/// </summary>
-
 public class SaveManager : MonoBehaviour
 {
     PlayerStatus m_playerStatus = new PlayerStatus();
@@ -17,8 +13,15 @@ public class SaveManager : MonoBehaviour
     public void SavePlayerData()
     {
         StreamWriter m_writer;
-        var playerName = "吉田崇信";
+        var playerName = "タカシ";
+
         m_playerStatus.SetPlayerName(playerName);
+        m_playerStatus.SetPlayerLevel(1);
+        m_playerStatus.SetMaxHp(100);
+        m_playerStatus.SetHp(100);
+        m_playerStatus.SetMaxMp(50);
+        m_playerStatus.SetMp(50);
+        
 
         string jsonstr = JsonUtility.ToJson(m_playerStatus);
 

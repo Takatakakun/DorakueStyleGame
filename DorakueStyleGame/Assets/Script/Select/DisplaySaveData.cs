@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// セーブデータの表示
@@ -13,31 +14,69 @@ public class DisplaySaveData : MonoBehaviour
 {
     PlayerStatus m_playerStatus = new PlayerStatus();
 
-    public Text m_saveData1;
-    public Text m_saveData2;
-    public Text m_saveData3;
+    public List<Text> m_saveData;
+
+    static string m_selectDataName;
 
     private void Start()
     {
-
         LoadPlayerData();
+
+        //Debug.Log(m_saveData.Count);
+
+        //Debug.Log(m_saveData[0]);
+        //Debug.Log(m_saveData[1]);
+        //Debug.Log(m_saveData[2]);
     }
 
+    //画面に表示用
     public void LoadPlayerData()
     {
+        //.jsonファイルを検索
+        string path = Application.dataPath + "/" + "Save";
+        string[] file = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
 
         string datastr = "";
 
-        StreamReader reader;
+        //.jsonファイル分ループ
+        for (int i = 0; i < file.Length; i++)
+        {
+            //データの読み込み
+            StreamReader reader = new StreamReader(file[i]);
+            datastr = reader.ReadToEnd();
+            reader.Close();
+
+            //読み込んだデータをPlayerStatusに変換
+            m_playerStatus = JsonUtility.FromJson<PlayerStatus>(datastr);
+            //テキストに入れる
+            m_saveData[i].text = "LV : " + m_playerStatus.GetPlayerLevel().ToString() + "\n" +
+                                 "プレイヤー名 : " + m_playerStatus.GetPlayerName() + "\n";
+
+        }
+        
+    }
+
+    //ボタン押されたとき
+    public void OnClick(string filename)
+    {
+        //選んだファイル名を保存（別のシーンでも使うため）
+        m_selectDataName = filename;
 
 
-        reader = new StreamReader(Application.dataPath + "/Save/" + "吉田崇信" + ".json");
+        string datastr = "";
+
+        //選んだデータの読み込み
+        StreamReader reader = new StreamReader(Application.dataPath + "/Save/" + filename + ".json");
         datastr = reader.ReadToEnd();
         reader.Close();
 
+        //読み込んだデータをPlayerStatusに変換
         m_playerStatus = JsonUtility.FromJson<PlayerStatus>(datastr);
-        Debug.Log(m_playerStatus.GetPlayerName() + "のデータをロードしました");
-        m_saveData1.text = m_playerStatus.GetPlayerName();
+
+        Debug.Log("Select : " + m_playerStatus.GetMaxHp());
+        Debug.Log("Select : " + m_playerStatus.GetMaxMp());
+
+        SceneManager.LoadScene("BattleScene");
     }
 
 }
