@@ -16,7 +16,7 @@ public class DisplaySaveData : MonoBehaviour
 
     public List<Text> m_saveData;
 
-    static string m_selectDataName;
+    public static string m_selectDataName;
 
     private void Start()
     {
@@ -61,20 +61,6 @@ public class DisplaySaveData : MonoBehaviour
     {
         //選んだファイル名を保存（別のシーンでも使うため）
         m_selectDataName = filename;
-
-
-        string datastr = "";
-
-        //選んだデータの読み込み
-        StreamReader reader = new StreamReader(Application.dataPath + "/Save/" + filename + ".json");
-        datastr = reader.ReadToEnd();
-        reader.Close();
-
-        //読み込んだデータをPlayerStatusに変換
-        m_playerStatus = JsonUtility.FromJson<PlayerStatus>(datastr);
-
-        Debug.Log("Select : " + m_playerStatus.GetMaxHp());
-        Debug.Log("Select : " + m_playerStatus.GetMaxMp());
 
         SceneManager.LoadScene("BattleScene");
     }

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 [Serializable]
-public class PlayerStatus :ScriptableObject
+public class PlayerStatus
 {
     [SerializeField]
     private Vector3    m_position;//場所
