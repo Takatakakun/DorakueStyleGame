@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700204de2aad83048b9550e40af51ede, type: 3}
+  m_Name: LeatherClothes
+  m_EditorClassIdentifier: 
+  m_itemType: 3
+  m_kanjiName: "\u76AE\u306E\u670D"
+  m_hiraganaName: "\u304B\u308F\u306E\u3075\u304F"
+  m_information: "\u76AE\u3067\u3064\u304F\u3089\u308C\u305F\u670D\u306E\u3088\u3046\u3060"
+  m_amount: 5
