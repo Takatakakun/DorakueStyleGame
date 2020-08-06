@@ -9,32 +9,32 @@ public class PlayerController : MonoBehaviour
 {
     public enum PlayerState
     {
-        Normal,
-        Talk
+        Normal,//通常
+        Talk,  //話す
+        Wait,   //待機
+        Menu
     }
 
-    private PlayerState m_state;//プレイヤーの状態
+    private PlayerState         m_state;        //プレイヤーの状態
     private CharacterController m_characterCtl;
-    private Animator m_animator;
-    private Vector3 m_velocity;
+    private Animator            m_animator;
+    private Vector3             m_velocity;     //速度
 
-    public Transform m_verRot;       //縦の視点移動の変数(カメラに合わせる)
-    public Transform m_horRot;       //横の視点移動の変数(プレイヤーに合わせる)
-    public float m_jumpPower;    //ジャンプ力
-    public float m_moveSpeed;    //移動速度
+    public float                m_jumpPower;    //ジャンプ力
+    public float                m_moveSpeed;    //移動速度
 
     private void Start()
     {
-        m_state = PlayerState.Normal;
+        m_state = PlayerState.Wait;
         m_characterCtl = GetComponent<CharacterController>();
         m_animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
+
         if (m_state == PlayerState.Normal)
         {
-
             PlayerRot();
             PlayerMove();
             PlayerJump();
@@ -42,45 +42,51 @@ public class PlayerController : MonoBehaviour
         else if (m_state == PlayerState.Talk)
         {
 
-        }
-        m_characterCtl.Move(m_velocity);
-        m_velocity.y += Physics.gravity.y * Time.deltaTime;
+        }else if (m_state == PlayerState.Wait)
+        {
 
+        }
+
+        //シーン遷移後に移動させるとデフォルトの位置にキャラクターがセットされてしまうので回避用
+        if (m_state != PlayerState.Wait)
+        {
+            m_velocity.y += Physics.gravity.y * Time.deltaTime;
+            m_characterCtl.Move(m_velocity * Time.deltaTime);
+        }
+        else
+        {
+            //遷移後パッドを動かすとステータスをノーマルに
+            if (!Mathf.Approximately(Input.GetAxis("Horizontal"), 0.0f) || !Mathf.Approximately(Input.GetAxis("Vertical"), 0.0f))
+            {
+                SetState(PlayerState.Normal);
+            }
+        }
     }
 
     //回転処理
     public void PlayerRot()
     {
-        float X_Rotation = Input.GetAxis("Mouse X");
-        float Y_Rotation = Input.GetAxis("Mouse Y");
-        m_horRot.transform.Rotate(new Vector3(0, X_Rotation * 2, 0));
-        m_verRot.transform.Rotate(-Y_Rotation * 2, 0, 0);
+        //float X_Rotation = Input.GetAxis("Mouse X");
+        //float Y_Rotation = Input.GetAxis("Mouse Y");
+        //m_horRot.transform.Rotate(new Vector3(0, X_Rotation * 2, 0));
+        //m_verRot.transform.Rotate(-Y_Rotation * 2, 0, 0);
 
     }
     //移動処理
     public void PlayerMove()
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            m_characterCtl.Move(this.gameObject.transform.forward * m_moveSpeed * Time.deltaTime);
-            m_animator.SetBool("run", true);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            m_characterCtl.Move(this.gameObject.transform.forward * -1.0f * m_moveSpeed * Time.deltaTime);
-            m_animator.SetBool("run", true);
-        }
+        m_velocity = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.A))
+        var input = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        if (input.magnitude > 0.1f)
         {
-            m_characterCtl.Move(this.gameObject.transform.right * -1.0f * m_moveSpeed * Time.deltaTime);
+            transform.LookAt(transform.position + input.normalized);
             m_animator.SetBool("run", true);
+            m_velocity += transform.forward * m_moveSpeed;
         }
-
-        if (Input.GetKey(KeyCode.D))
+        else
         {
-            m_characterCtl.Move(this.gameObject.transform.right * m_moveSpeed * Time.deltaTime);
-            m_animator.SetBool("run", true);
+            m_animator.SetBool("run", false);
         }
     }
     //ジャンプ処理
@@ -88,10 +94,37 @@ public class PlayerController : MonoBehaviour
     {
         if (m_characterCtl.isGrounded)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetButtonDown("A_Button"))
             {
                 m_velocity.y = m_jumpPower;
             }
         }
+    }
+    //ステータス変更
+    public void SetState(PlayerState state)
+    {
+        this.m_state = state;
+
+        if (state == PlayerState.Talk)
+        {
+            m_velocity = Vector3.zero;
+            m_animator.SetBool("run", false);
+        }
+        else if(state == PlayerState.Wait)
+        {
+            m_velocity = Vector3.zero;
+            m_animator.SetBool("run", false);
+        }
+        else if (state == PlayerState.Menu)
+        {
+            m_velocity = Vector3.zero;
+            m_animator.SetBool("run", false);
+        }
+    }
+
+    //ステータス取得
+    public PlayerState GetState()
+    {
+        return m_state;
     }
 }

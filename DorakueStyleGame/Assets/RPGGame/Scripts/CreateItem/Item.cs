@@ -28,9 +28,12 @@ public class Item : ScriptableObject
     //アイテム情報
     [SerializeField]
     private string m_information = "";
-    //アイテムのパラメータ
+    //アイテムの力の強さ
     [SerializeField]
-    private int    m_amount = 0;
+    private int    m_poworAmount = 0;
+    //アイテムの魔法の強さ
+    [SerializeField]
+    private int m_magicAmount = 0;
 
     //アイテムの種類
     public Type GetItemType()
@@ -52,9 +55,15 @@ public class Item : ScriptableObject
     {
         return m_information;
     }
-    //アイテムの強さを返す
-    public int GetAmount()
+    //アイテムの力の強さ 
+    public int GetPowerAmount()
     {
-        return m_amount;
+        return m_poworAmount;
     }
+    //アイテムの魔法の強さ
+    public int GetMagicAmount()
+    {
+        return m_magicAmount;
+    }
+
 }

@@ -11,16 +11,19 @@ using UnityEngine.UI;
 //CharacterStatusを継承
 public class AllyStatus : CharacterStatus
 {
-    //　獲得経験値
+    //獲得経験値
     [SerializeField]
     private int m_earnedExperience = 0;
-    //　装備している武器
+    //獲得したお金
+    [SerializeField]
+    private int m_earnedMoney = 0;
+    //装備している武器
     [SerializeField]
     private Item m_equipWeapon = null;
-    //　装備している鎧
+    //装備している鎧
     [SerializeField]
     private Item m_equipArmor = null;
-    //　アイテムと個数のDictionary
+    //アイテムと個数のDictionary
     [SerializeField]
     private ItemDictionary m_itemDictionary = null;
 
@@ -32,6 +35,16 @@ public class AllyStatus : CharacterStatus
     public int GetEarnedExperience()
     {
         return m_earnedExperience;
+    }
+
+    public void SetEarnedMoney(int earnedMoney)
+    {
+        this.m_earnedMoney = earnedMoney;
+    }
+
+    public int GetEarnedMoney()
+    {
+        return m_earnedMoney;
     }
 
     public void SetEquipWeapon(Item weaponItem)

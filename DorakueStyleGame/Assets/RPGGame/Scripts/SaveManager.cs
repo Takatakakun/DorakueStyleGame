@@ -36,11 +36,11 @@ public class SaveManager : MonoBehaviour
             {
                 data = JsonUtility.FromJson<Data>(PlayerPrefs.GetString(m_dataName + i));
 
-                if (data.SceneType == SceneTransitionData.SceneType.FirstVillage)
+                if (data.SceneType == SceneTransitionData.SceneType.CastleTown)
                 {
                     place = "最初の村";
                 }
-                else if (data.SceneType == SceneTransitionData.SceneType.WorldMap)
+                else if (data.SceneType == SceneTransitionData.SceneType.CastleTownToWorldMap)
                 {
                     place = "ワールドマップ";
                 }
@@ -85,9 +85,9 @@ public class SaveManager : MonoBehaviour
     {
         Data data = new Data();
         //シーンデータをセット
-        if (SceneManager.GetActiveScene().name == "Village")
+        if (SceneManager.GetActiveScene().name == "CastleTown")
         {
-            data.SceneType = SceneTransitionData.SceneType.FirstVillage;
+            data.SceneType = SceneTransitionData.SceneType.CastleTown;
         }
         else if (SceneManager.GetActiveScene().name == "WorldMap")
         {
@@ -109,6 +109,7 @@ public class SaveManager : MonoBehaviour
         data.PlayerPowerDefense     = m_playerStatus.GetPowerDefense();
         data.PlayerMagicDefense     = m_playerStatus.GetMagicDefense();
         data.PlayerEarnedExperience = m_playerStatus.GetEarnedExperience();
+        data.PlayerEarnedMoney      = m_playerStatus.GetEarnedMoney();
         data.PlayerEquipWeapon      = m_playerStatus.GetEquipWeapon();
         data.PlayerEquipArmor       = m_playerStatus.GetEquipArmor();
 

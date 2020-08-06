@@ -9,6 +9,6 @@ public class TitleManager : MonoBehaviour
     //クリックしたら次のシーンへ
     public void OnClickStart()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("CastleTown");
     }
 }

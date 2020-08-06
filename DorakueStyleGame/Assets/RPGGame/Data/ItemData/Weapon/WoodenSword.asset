@@ -16,4 +16,5 @@ MonoBehaviour:
   m_kanjiName: "\u6728\u306E\u5263"
   m_hiraganaName: "\u304D\u306E\u3051\u3093"
   m_information: "\u6728\u3067\u4F5C\u3089\u308C\u305F\u5263\u306E\u3088\u3046\u3060"
-  m_amount: 5
+  m_poworAmount: 8
+  m_magicAmount: 0

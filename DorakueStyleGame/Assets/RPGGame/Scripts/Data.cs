@@ -40,6 +40,8 @@ public class Data
     [SerializeField]
     private int            m_playerEarnedExperience;//獲得経験値
     [SerializeField]
+    private int            m_playerEarnedMoney;     //獲得したお金
+    [SerializeField]
     private Item           m_playerEquipWeapon;     //装備武器
     [SerializeField]
     private Item           m_playerEquipArmor;      //装備防具
@@ -129,6 +131,11 @@ public class Data
     {
         get { return m_playerEarnedExperience; }
         set { m_playerEarnedExperience = value; }
+    }
+    public int PlayerEarnedMoney
+    {
+        get { return m_playerEarnedMoney; }
+        set { m_playerEarnedMoney = value; }
     }
     public Item PlayerEquipWeapon
     {
