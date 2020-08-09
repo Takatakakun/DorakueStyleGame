@@ -20,17 +20,18 @@ public class PlayerMenu : MonoBehaviour
 
     private void Update()
     {
-        if (sceneManager.IsTransition()|| m_playerController.GetState() == PlayerController.PlayerState.Talk)
+
+        if (sceneManager.IsTransition()==true|| m_playerController.GetState() == PlayerController.PlayerState.Talk)
         {
             return;
         }
         //メニューUIの表示・非表示の切り替え
         if (Input.GetButtonDown("Y_Button"))
         {
-            //コマンド
+            //メニュー
             if (!m_menuUI.activeSelf)
             {
-                //プレイヤーをコマンド状態にする
+                //プレイヤーをメニュー状態にする
                 m_playerController.SetState(PlayerController.PlayerState.Menu);
             }
             else
@@ -40,8 +41,9 @@ public class PlayerMenu : MonoBehaviour
             //コマンドUIのオン・オフ
             m_menuUI.SetActive(!m_menuUI.activeSelf);
         }
+
     }
-    //CommandScriptから呼び出すメニュー画面の終了
+    //MenuControllerから呼び出すメニュー画面の終了
     public void ExitMenu()
     {
         EventSystem.current.SetSelectedGameObject(null);

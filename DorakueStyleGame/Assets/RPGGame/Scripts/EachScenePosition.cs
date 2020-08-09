@@ -33,5 +33,6 @@ public class EachScenePosition : MonoBehaviour
             transform.rotation = initialPosition.rotation;
         }
 
+        Debug.Log(m_sceneTransitionData.GetSceneType());
     }
 }

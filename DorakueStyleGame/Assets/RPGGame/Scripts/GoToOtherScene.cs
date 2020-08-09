@@ -13,7 +13,7 @@ public class GoToOtherScene : MonoBehaviour
     [SerializeField][Header("どのシーンに遷移したいかえらぶ")]
     private SceneTransitionData.SceneType scene = SceneTransitionData.SceneType.CastleTown;
     //シーン遷移中かどうか
-    private bool isTransition;
+    private bool isTransition = false;
 
     private void Awake()
     {

@@ -9,22 +9,28 @@ public class MenuController : MonoBehaviour
 {
     public enum MenuMode
     {
-        MenuPanel,//メニューパネル
-        StatusPanel,//ステータスパネル
-        ConfirmationPanel//確認パネル
+        MenuPanel,      //メニューパネル
+        StatusPanel,    //ステータスパネル
+        ItemPanel,      //アイテム選択パネル
+        ToolPanel,      //道具パネル
+        UseItemPanel,   //アイテムの使用や渡す、捨てる等を表示するパネルの状態
+        UseItemPanelToUseItemPanel,//アイテムを捨てるを選択した後にまだそのアイテムがある状態
+        UseItemSelectCharacterPanelToUseItemPanel,//アイテムを使用、渡すを選択した後に使用する、渡す相手を選択した後の状態
+        NoItemPassed//アイテムを使用、渡す、捨てるを選択した後にそのアイテムが0になり他のアイテムも一つも持っていない状態
     }
-    [SerializeField]
+    [SerializeField][Header("PlayerStayusを入れる")]
     private AllyStatus m_playerStatus;
     private MenuMode m_menuMode;
-    private PlayerMenu m_playerMenu;
+    private PlayerMenu m_playerMenu;//プレイヤーのメニュースクリプト
 
     //最初に選択するButtonのTransform
-    private GameObject firstSelectButton;
-
+    private GameObject m_firstSelectButton;
     //メニューパネル
     private GameObject m_menuPanel;
     //ステータス表示パネル
     private GameObject m_statusPanel;
+    //アイテムパネル
+    private GameObject m_itemPanel;
 
     //メニューパネルのCanvasGroup
     private CanvasGroup m_menuPanelCanvasGroup;
@@ -48,10 +54,11 @@ public class MenuController : MonoBehaviour
         //現在のメニューを初期化
         m_menuMode = MenuMode.MenuPanel;
         //階層を辿ってを取得
-        firstSelectButton = transform.Find("MenuPanel/StatusButton").gameObject;
+        m_firstSelectButton = transform.Find("MenuPanel/StatusButton").gameObject;
         //パネル系を取得
         m_menuPanel = transform.Find("MenuPanel").gameObject;
         m_statusPanel = transform.Find("StatusPanel").gameObject;
+        m_itemPanel = transform.Find("ItemPanel").gameObject;
         //CanvasGroupを取得
         m_menuPanelCanvasGroup = m_menuPanel.GetComponent<CanvasGroup>();
         //ステータス用テキストを取得
@@ -73,7 +80,7 @@ public class MenuController : MonoBehaviour
 
         m_menuPanelCanvasGroup.interactable = true;
 
-        EventSystem.current.SetSelectedGameObject(firstSelectButton);
+        EventSystem.current.SetSelectedGameObject(m_firstSelectButton);
     }
 
     private void Update()
@@ -91,6 +98,12 @@ public class MenuController : MonoBehaviour
             else if (m_menuMode == MenuMode.StatusPanel)
             {
                 m_statusPanel.SetActive(false);
+                m_menuMode = MenuMode.MenuPanel;
+            }
+            //アイテム選択画面時
+            else if (m_menuMode == MenuMode.ItemPanel)
+            {
+                m_itemPanel.SetActive(false);
 
                 //前のパネルで選択していたゲームオブジェクトを選択
                 EventSystem.current.SetSelectedGameObject(selectedGameObjectStack.Pop());
@@ -111,16 +124,25 @@ public class MenuController : MonoBehaviour
             selectedGameObjectStack.Push(EventSystem.current.currentSelectedGameObject);
             GetComponent<Button>().onClick.AddListener(() => ShowPlayerStatus(m_playerStatus));
         }
-
+        else if(command == "Item")
+        {
+            m_menuMode = MenuMode.ItemPanel;
+            m_statusPanel.SetActive(false);
+            m_itemPanel.SetActive(true);
+            //UIのオン・オフや選択アイコンの設定
+            m_menuPanelCanvasGroup.interactable = false;
+            selectedGameObjectStack.Push(EventSystem.current.currentSelectedGameObject);
+            //GetComponent<Button>().onClick.AddListener(() => ShowPlayerStatus(m_playerStatus));
+        }
     }
 
     //プレイヤーのステータス表示
-    public void ShowPlayerStatus(AllyStatus allyStatus)
+    public void ShowPlayerStatus(AllyStatus playerStatus)
     {
         m_menuMode = MenuMode.StatusPanel;
         m_statusPanel.SetActive(true);
         //キャラクターの名前を表示
-        m_characterNameText.text = allyStatus.GetCharacterName();
+        m_characterNameText.text = playerStatus.GetCharacterName();
 
         //タイトルの表示
         var text = "レベル\n";
@@ -140,24 +162,25 @@ public class MenuController : MonoBehaviour
         //HPとMPのDivision記号の表示
         text = "\n";
         text += "\n";
-        text += allyStatus.GetHp() + "\n";
-        text += allyStatus.GetMp() + "\n";
+        text += playerStatus.GetHp() + "\n";
+        text += playerStatus.GetMp() + "\n";
         m_statusParam1Text.text = text;
 
         //　ステータスパラメータの表示
-        text = allyStatus.GetLevel() + "\n";
-        text += allyStatus.GetEarnedExperience() + "\n";
-        text += allyStatus.GetMaxHp() + "\n";
-        text += allyStatus.GetMaxMp() + "\n";
-        text += allyStatus.GetAgility() + "\n";
-        text += allyStatus.GetPower() + (allyStatus.GetEquipWeapon()?.GetPowerAmount() ?? 0) + "\n";
-        text += allyStatus.GetMagicPower() + (allyStatus.GetEquipWeapon()?.GetMagicAmount() ?? 0) + "\n";
-        text += allyStatus.GetPowerDefense() + (allyStatus.GetEquipArmor()?.GetPowerAmount() ?? 0) + "\n";
-        text += allyStatus.GetMagicDefense() + (allyStatus.GetEquipArmor()?.GetMagicAmount() ?? 0) + "\n";
-        text += allyStatus?.GetEquipWeapon()?.GetKanjiName() ?? "";
+        text = playerStatus.GetLevel() + "\n";
+        text += playerStatus.GetEarnedExperience() + "\n";
+        text += playerStatus.GetMaxHp() + "\n";
+        text += playerStatus.GetMaxMp() + "\n";
+        text += playerStatus.GetAgility() + "\n";
+        text += playerStatus.GetPower() + (playerStatus.GetEquipWeapon()?.GetPowerAmount() ?? 0) + "\n";
+        text += playerStatus.GetMagicPower() + (playerStatus.GetEquipWeapon()?.GetMagicAmount() ?? 0) + "\n";
+        text += playerStatus.GetPowerDefense() + (playerStatus.GetEquipArmor()?.GetPowerAmount() ?? 0) + "\n";
+        text += playerStatus.GetMagicDefense() + (playerStatus.GetEquipArmor()?.GetMagicAmount() ?? 0) + "\n";
+        text += playerStatus?.GetEquipWeapon()?.GetKanjiName() ?? "";
         text += "\n";
-        text += allyStatus.GetEquipArmor()?.GetKanjiName() ?? "";
+        text += playerStatus.GetEquipArmor()?.GetKanjiName() ?? "";
         text += "\n";
+        text += playerStatus.GetEarnedMoney() + "\n";
         m_statusParam2Text.text = text;
     }
 }

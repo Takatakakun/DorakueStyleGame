@@ -22,12 +22,13 @@ public class LoadSceneManager : MonoBehaviour
     private Image m_fadeImage;
     [SerializeField]
     private float m_fadeSpeed = 5.0f;
-    //　シーン遷移中かどうか
-    private bool m_isTransition;
+    //シーン遷移中かどうか
+    private bool m_isTransition = false;
 
     private void Awake()
     {
-        // LoadSceneMangerは常に一つだけにする
+
+        //LoadSceneMangerは常に一つだけにする
         if (m_loadSceneManager == null)
         {
             m_loadSceneManager = this;
@@ -37,8 +38,9 @@ public class LoadSceneManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
-    //　次のシーンを呼び出す
+    //次のシーンを呼び出す
     public void GoToNextScene(SceneTransitionData.SceneType scene)
     {
         m_isTransition = true;
@@ -46,10 +48,10 @@ public class LoadSceneManager : MonoBehaviour
         StartCoroutine(FadeAndLoadScene(scene));
     }
 
-    //　フェードをした後にシーン読み込み
+    //フェードをした後にシーン読み込み
     IEnumerator FadeAndLoadScene(SceneTransitionData.SceneType scene)
     {
-        //　フェードUIのインスタンス化
+        //フェードUIのインスタンス化
         m_fadeInstance = Instantiate<GameObject>(m_fadePrefab);
         m_fadeImage = m_fadeInstance.GetComponentInChildren<Image>();
         //　フェードアウト処理
@@ -65,18 +67,18 @@ public class LoadSceneManager : MonoBehaviour
             yield return StartCoroutine(LoadScene("WorldMap"));
         }
 
-        //　フェードUIのインスタンス化
+        //フェードUIのインスタンス化
         m_fadeInstance = Instantiate<GameObject>(m_fadePrefab);
         m_fadeImage = m_fadeInstance.GetComponentInChildren<Image>();
         m_fadeImage.color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
 
-        //　フェードイン処理
+        //フェードイン処理
         yield return StartCoroutine(Fade(0.0f));
 
         Destroy(m_fadeInstance);
     }
 
-    //　フェード処理
+    //フェード処理
     IEnumerator Fade(float alpha)
     {
         var fadeImageAlpha = m_fadeImage.color.a;
@@ -89,13 +91,15 @@ public class LoadSceneManager : MonoBehaviour
         }
     }
 
-    //　実際にシーンを読み込む処理
+    //実際にシーンを読み込む処理
     IEnumerator LoadScene(string sceneName)
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
-
+        //読み込みが終了したか
         while (!async.isDone)
         {
+            //読み込みが終わったら遷移完了
+            m_isTransition = false;
             yield return null;
         }
     }
