@@ -24,9 +24,11 @@ MonoBehaviour:
   m_powerDefense: 10
   m_magicDefense: 10
   m_earnedExperience: 0
+  m_earnedMoney: 0
   m_equipWeapon: {fileID: 11400000, guid: 34f81b342a1427146a3796747aab8f3c, type: 2}
   m_equipArmor: {fileID: 11400000, guid: d37f2e9537db12849b8fca076cf1b6fa, type: 2}
   m_itemDictionary:
     m_keys:
     - {fileID: 11400000, guid: 0823849483503744881ca0517a6e2aca, type: 2}
-    m_values: 05000000
+    - {fileID: 11400000, guid: e71a4aaadbb002b4d867b57cc068a63c, type: 2}
+    m_values: 0500000005000000

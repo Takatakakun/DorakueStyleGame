@@ -43,7 +43,7 @@ public class PlayerMenu : MonoBehaviour
         }
 
     }
-    //MenuControllerから呼び出すメニュー画面の終了
+    //MenuControllerから呼び出すメニュー画面の終了時に呼ぶ
     public void ExitMenu()
     {
         EventSystem.current.SetSelectedGameObject(null);
