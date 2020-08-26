@@ -25,8 +25,8 @@ public class GoToOtherScene : MonoBehaviour
             sceneManager.GoToNextScene(scene);
         }
     }
-    ////フェードをした後にシーン読み込み
-    //IEnumerator FadeAndLoadScene(SceneMovementData.SceneType scene)
+    //フェードをした後にシーン読み込み
+    // IEnumerator FadeAndLoadScene(SceneMovementData.SceneType scene)
     //{
     //    /*
     //    その他の処理

@@ -30,4 +30,6 @@ MonoBehaviour:
   itemDictionary:
     m_keys:
     - {fileID: 11400000, guid: a2ac249f79c7e3a4aaf3c4ba72222804, type: 2}
-    m_values: 03000000
+    - {fileID: 11400000, guid: 4b79deeac87e0c04f9613d5a96ae6ddf, type: 2}
+    - {fileID: 11400000, guid: 9f51441549c9e624a99d6a02ef6df37e, type: 2}
+    m_values: 030000000100000001000000
